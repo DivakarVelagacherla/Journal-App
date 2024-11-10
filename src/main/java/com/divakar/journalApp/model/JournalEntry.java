@@ -1,25 +1,26 @@
 package com.divakar.journalApp.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Document(collection = "journal_entry")
 public class JournalEntry {
 
     @Id
-    private String id;
+    private ObjectId id;
     private String title;
     private String content;
-    private Date date;
+    private LocalDateTime date;
 
-    public String getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -39,11 +40,11 @@ public class JournalEntry {
         this.content = content;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
