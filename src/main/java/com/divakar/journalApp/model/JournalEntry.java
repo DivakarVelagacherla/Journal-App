@@ -1,4 +1,4 @@
-package com.divakar.model;
+package com.divakar.journalApp.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -6,8 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@Component
-@Document
+@Document(collection = "journal_entry")
 public class JournalEntry {
 
     @Id

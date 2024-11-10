@@ -1,14 +1,19 @@
-package com.divakar.controller;
+package com.divakar.journalApp.controller;
 
-import com.divakar.model.JournalEntry;
+import com.divakar.journalApp.model.JournalEntry;
+import com.divakar.journalApp.service.JournalEntryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/journal")
 public class JournalEntryController {
 
+    @Autowired
+    private JournalEntryService journalEntryService;
 
     @GetMapping
     public JournalEntry getAllEntries(){
@@ -26,7 +31,9 @@ public class JournalEntryController {
     }
 
     @PostMapping
-    public boolean addEntry(JournalEntry journalEntry){
+    public boolean addEntry(@RequestBody JournalEntry journalEntry){
+        journalEntry.setDate(new Date());
+        journalEntryService.saveEntry(journalEntry);
         return true;
     }
 
