@@ -13,4 +13,3 @@ Hopefully I will add most of the features by the end of the project
 - [ ] Added Updating Journals
 - [ ] Junit Testing
 - [ ] Mockito Testing
-- [ ] 
