@@ -12,5 +12,6 @@ Hopefully I will add most of the features by the end of the project
 - [x] Added deleting Journals
 - [x] Added Updating Journals
 - [x] Implementing Response Codes based on the Responses
+- [x] Implemented Lombok to reduce boiler plate code
 - [ ] Junit Testing
 - [ ] Mockito Testing
