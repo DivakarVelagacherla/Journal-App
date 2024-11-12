@@ -13,7 +13,7 @@ import java.util.List;
 
 @Document(collection = "users")
 @Data
-public class Users {
+public class User {
 
     @Id
     private ObjectId id;

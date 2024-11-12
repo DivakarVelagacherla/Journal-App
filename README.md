@@ -13,5 +13,6 @@ Hopefully I will add most of the features by the end of the project
 - [x] Implemented Lombok to reduce boiler plate code
 - [x] Added User Entity
 - [x] Added CRUD functionalities of User Entity
+- [x] Made some features Transactional
 - [ ] Junit Testing
 - [ ] Mockito Testing
