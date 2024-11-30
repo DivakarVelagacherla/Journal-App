@@ -14,5 +14,7 @@ Hopefully I will add most of the features by the end of the project
 - [x] Added User Entity
 - [x] Added CRUD functionalities of User Entity
 - [x] Made some features Transactional
+- [x] Move DB from local to Atlas MongoDB
+- [x] Added Spring Security
 - [ ] Junit Testing
 - [ ] Mockito Testing

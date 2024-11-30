@@ -5,54 +5,44 @@ import com.divakar.journalApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
 public class UserEntryController {
 
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    private UserService userService;
-
-    @GetMapping
-    public ResponseEntity<?> getAllUsers(){
-        return new ResponseEntity<>(userService.getAllUsers(),HttpStatus.OK);
+    public UserEntryController(UserService userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping("/username/{userName}")
-    public ResponseEntity<?> getUserByUserName(@PathVariable String userName){
-        User user = userService.getUserByUserName(userName);
-        if(user != null){
-            return new ResponseEntity<>(user, HttpStatus.FOUND);
-        }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 
-    @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody User user){
-        if(userService.getUserByUserName(user.getUserName()) == null ){
-            userService.createUser(user);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }else{
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-    }
 
     @PutMapping
-    public ResponseEntity<?> updateUser(@RequestBody User user){
-        User userInDb = userService.getUserByUserName(user.getUserName());
-        if(userInDb != null){
-            userInDb.setUserName(user.getUserName());
-            userInDb.setPassword(user.getPassword());
-            userService.createUser(userInDb);
-            return new ResponseEntity<>("User Updated", HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
 
+        User userInDb = userService.getUserByUserName(userName);
+        userInDb.setUserName(user.getUserName());
+        userInDb.setPassword(user.getPassword());
+        userService.createUser(userInDb);
+        return new ResponseEntity<>("User Updated", HttpStatus.OK);
     }
 
-
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        userService.deleteUserByUserName(authentication.getName());
+        return new ResponseEntity<>("User Deleted", HttpStatus.OK);
+    }
 
 }

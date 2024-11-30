@@ -1,7 +1,6 @@
 package com.divakar.journalApp.service;
 
 import com.divakar.journalApp.model.JournalEntry;
-import com.divakar.journalApp.service.UserService;
 import com.divakar.journalApp.model.User;
 import com.divakar.journalApp.repository.JournalEntryRepository;
 import org.bson.types.ObjectId;
@@ -17,22 +16,23 @@ public class JournalEntryService {
 
     @Autowired
     JournalEntryRepository journalEntryRepository;
+
     @Autowired
     UserService userService;
 
     @Transactional
-    public void saveEntry(JournalEntry journalEntry, String userName){
+    public void saveEntry(JournalEntry journalEntry, String userName) {
         User user = userService.getUserByUserName(userName);
         JournalEntry saved = journalEntryRepository.save(journalEntry);
         user.getJournalEntries().add(saved);
-        userService.createUser(user);
+        userService.saveUser(user);
     }
 
-    public void saveEntry(JournalEntry journalEntry){
+    public void saveEntry(JournalEntry journalEntry) {
         journalEntryRepository.save(journalEntry);
     }
 
-    public List<JournalEntry> getAllEntries(){
+    public List<JournalEntry> getAllEntries() {
         return journalEntryRepository.findAll();
     }
 
@@ -41,11 +41,16 @@ public class JournalEntryService {
 
     }
 
+    @Transactional
     public boolean deleteById(ObjectId id, String userName) {
         User user = userService.getUserByUserName(userName);
-        user.getJournalEntries().removeIf(x -> x.getId().equals(id));
-        userService.createUser(user);
-        journalEntryRepository.deleteById(id);
-        return true;
+        boolean removed = user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+        if (removed) {
+            userService.saveUser(user);
+            journalEntryRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
+
 }
